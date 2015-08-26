@@ -19,7 +19,6 @@
       - bazaar
       - boot2docker
       - docker
-      - encfs
       - fish
       - ghc
       - git
@@ -123,7 +122,7 @@
       file: path="{{ dev_base }}/{{ dev_root }}" state=directory
 
     - name: Create symlink to Dev folder
-      file: src="{{ dev_base }}/{{ dev_root }}" dest="{{ home }}"
+      file: src="{{ dev_base }}/{{ dev_root }}" dest="{{ home }}q"
 
     - name: Create Personal Dev folder
       file: path="{{ personal_dev_home }}" state=directory
