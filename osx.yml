@@ -1,0 +1,167 @@
+---
+- hosts: all
+  vars:
+    home: "{{ lookup('env','HOME') }}"
+    dev_base: /Users/Shared/Development/NikeBuild
+    dev_root: Development
+    dev_home: "{{ home }}/{{ dev_root }}"
+    personal_dev_home: "{{ dev_home }}/Personal"
+    homebrew_taps:
+      - phinze/cask
+      - caskroom/fonts
+
+    homebrew_libs:
+      - ack
+      - ant
+      - autoconf
+      - automake
+      - avrdude
+      - bazaar
+      - boot2docker
+      - docker
+      - encfs
+      - fish
+      - ghc
+      - git
+      - go
+      - groovy
+      - ghc
+      - jsonpp
+      - lame
+      - leveldb
+      - maven
+      - mercurial
+      - mlton
+      - node
+      - objective-caml
+      - opam
+      - python
+      - rbenv
+      - rbenv-vars
+      - ruby
+      - ruby-build
+      - rust
+      - sbt
+      - scala
+      - smlnj
+      - ssh-copy-id
+      - tmux
+      - tree
+      - wget
+
+    fonts:
+      - droid-sans
+      - droid-sans-mono
+      - droid-serif
+      - anonymous-pro-for-powerline
+      - dejavu-sans-mono-for-powerline
+      - droid-sans
+      - droid-sans-mono
+      - droid-sans-mono-for-powerline
+      - droid-serif
+      - fira-mono-for-powerline
+      - inconsolata-dz-for-powerline
+      - inconsolata-for-powerline
+      - inconsolata-g-for-powerline
+      - liberation-mono-for-powerline
+      - meslo-lg-for-powerline
+      - sauce-code-powerline
+      - source-code-pro-for-powerline
+      - ubuntu-mono-powerline
+
+    applications:
+      - 1password
+      - adium
+      - alfred
+      - calibre
+      - dropbox
+      - firefox
+      - google-chrome
+      - google-drive
+      - hipchat
+      - istat-menus
+      - iterm2
+      - kindle
+      - moom
+      - skype
+      - transmission
+      - transmit
+      - vagrant
+      - virtualbox
+      - visualvm
+      - vlc
+
+    projects:
+      - name: emacs.d
+        git: https://github.com/tlockney/emacs.d.git
+        path: emacs.d
+      - name: dotfiles
+        git: https://github.com/tlockney/dotfiles.git
+        path: dotfiles
+
+    python_libs:
+      - PyYAML
+      - paramiko
+      - vboxapi
+      - boto
+      - virtualenv
+
+    ruby_libs:
+      - compass
+      - nokogiri
+      - sqlite3
+      - libxml-ruby
+      - unf
+
+    node_libs:
+      - generator-webapp
+      - lineman
+      - yo
+
+  tasks:
+    - name: Create Development folder in safe virus scan free location
+      file: path="{{ dev_base }}/{{ dev_root }}" state=directory
+
+    - name: Create symlink to Dev folder
+      file: src="{{ dev_base }}/{{ dev_root }}" dest="{{ dev_home}}"
+
+    - name: Create Personal Dev folder
+      file: path="{{ personal_dev_home }}" state=directory
+
+    - name: Clone projects
+      git: repo="{{ item.git }}" dest="{{ personal_dev_home }}/{{ item.path }}" force=no update=no
+      with_items: projects
+
+    - name: Set up Homebrew taps
+      homebrew_tap: tap="{{ item }}" state=present
+      with_items: homebrew_taps
+
+    - name: Update Homebrew and all installed libraries
+      homebrew: update_homebrew=yes upgrade_all=yes
+
+    - name: Install additional fonts
+      homebrew_cask: name=font-{{ item }} state=present
+      with_items: fonts
+
+    - name: Install libraries with Homebrew
+      homebrew: name="{{ item }}" state=present
+      with_items: homebrew_libs
+
+    - name: Install Emacs with Homebrew
+      homebrew: name=emacs state=present install_options=with-gnutls,with-cocoa,srgb,HEAD
+
+    - name: Install apps with brew-cask
+      homebrew_cask: name="{{ item }}" state=present
+      with_items: applications
+
+    - name: Install Python modules via pip
+      pip: name="{{ item }}"
+      with_items: python_libs
+
+    - name: Install Ruby modules via gem
+      gem: name="{{ item }}"
+      with_items: ruby_libs
+
+    - name: Install Node modules via npm
+      npm: name="{{ item }}" global=yes
+      with_items: node_libs
