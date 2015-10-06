@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 if [[ `uname` == 'Darwin' ]]; then
-   ansible-playbook -i hosts osx.yml
+   ansible-playbook -v -i hosts osx.yml
 else
-   ansible-playbook -i hosts ubuntu.yml
+   ansible-playbook -v -i hosts ubuntu.yml
 fi
