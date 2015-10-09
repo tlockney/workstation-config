@@ -6,6 +6,7 @@
     dev_root: Development
     dev_home: "{{ home }}/{{ dev_root }}"
     personal_dev_home: "{{ dev_home }}/Personal"
+    thirdparty_dev_home: "{{ dev_home }}/ThirdParty"
     homebrew_taps:
       - phinze/cask
       - caskroom/fonts
@@ -16,14 +17,24 @@
       - autoconf
       - automake
       - avrdude
+      - awscli
       - bazaar
       - boot2docker
+      - corkscrew
       - docker
       - fish
+      - giter8
       - ghc
       - git
+      - go
+      - htop-osx
       - jsonpp
+      - jq
+      - mackup
+      - markdown
       - node
+      - opam
+      - pandoc
       - python
       - rbenv
       - rbenv-vars
@@ -34,6 +45,7 @@
       - ssh-copy-id
       - tmux
       - tree
+      - unrar
       - wget
 
     fonts:
@@ -43,7 +55,6 @@
       - anonymous-pro-for-powerline
       - dejavu-sans-mono-for-powerline
       - droid-sans
-      - droid-sans-mono
       - droid-sans-mono-for-powerline
       - droid-serif
       - fira-mono-for-powerline
@@ -54,27 +65,40 @@
       - meslo-lg-for-powerline
       - sauce-code-powerline
       - source-code-pro-for-powerline
+      - source-sans-pro
       - ubuntu-mono-powerline
 
     applications:
       - 1password
       - adium
       - alfred
+      - anki
       - calibre
+      - dash
       - dropbox
+      - evernote
       - firefox
+      - geektool
       - google-chrome
       - google-drive
+      - hazel
       - hipchat
+      - intellij-idea-ce
       - istat-menus
       - iterm2
       - kindle
       - moom
+      - mou
+      - omnigraffle
       - skype
+      - slack
+      - totalspaces
       - transmission
       - transmit
+      - twitterrific
+      - yourkit-java-profiler
       - vagrant
-      - virtualbox
+#      - virtualbox
       - visualvm
       - vlc
 
@@ -85,14 +109,23 @@
       - name: dotfiles
         git: https://github.com/tlockney/dotfiles.git
         path: dotfiles
+        
+    thirdparty_projects:
+      - name: solarized
+        git: https://github.com/altercation/solarized.git
+        path: solarized
 
     python_libs:
-      - PyYAML
-      - paramiko
-      - vboxapi
       - boto
+      - markdown
+      - paramiko
+      - pelican
+      - powerline-status
+      - PyYAML
+      - saws
       - virtualenv
-
+      - vboxapi
+      
     ruby_libs:
       - compass
       - nokogiri
@@ -101,6 +134,7 @@
       - unf
 
     node_libs:
+      - aglio
       - generator-webapp
       - lineman
       - yo
@@ -115,9 +149,13 @@
     - name: Create Personal Dev folder
       file: path="{{ personal_dev_home }}" state=directory
 
-    - name: Clone projects
+    - name: Clone Personal projects
       git: repo="{{ item.git }}" dest="{{ personal_dev_home }}/{{ item.path }}" force=no update=no
       with_items: projects
+
+    - name: Clone third-party projects
+      git: repo="{{ item.git }}" dest="{{ thirdparty_dev_home }}/{{ item.path }}" force=no update=no
+      with_items: thirdparty_projects
 
     - name: Set up Homebrew taps
       homebrew_tap: tap="{{ item }}" state=present
