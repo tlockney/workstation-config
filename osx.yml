@@ -20,6 +20,7 @@
       - awscli
       - bazaar
       - boot2docker
+      - coreutils
       - corkscrew
       - docker
       - fish
@@ -72,12 +73,14 @@
       - 1password
       - adium
       - alfred
+      - android-file-transfer
       - anki
       - calibre
       - dash
       - dropbox
       - evernote
       - firefox
+      - forego
       - geektool
       - google-chrome
       - google-drive
@@ -118,6 +121,7 @@
     python_libs:
       - boto
       - markdown
+      - mkdocs
       - paramiko
       - pelican
       - powerline-status
