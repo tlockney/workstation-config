@@ -20,10 +20,14 @@
       - awscli
       - bazaar
       - boot2docker
+      - cabal-install
       - coreutils
       - corkscrew
       - docker
+      - elixir
       - fish
+      - ffmpeg
+      - forego
       - giter8
       - ghc
       - git
@@ -31,12 +35,16 @@
       - htop-osx
       - jsonpp
       - jq
+      - leiningen
       - mackup
       - markdown
+      - mono
       - node
       - opam
       - pandoc
+      - packer
       - python
+      - postgresql
       - rbenv
       - rbenv-vars
       - ruby
@@ -65,7 +73,7 @@
       - liberation-mono-for-powerline
       - meslo-lg-for-powerline
       - sauce-code-powerline
-      - source-code-pro-for-powerline
+#      - source-code-pro-for-powerline
       - source-sans-pro
       - ubuntu-mono-powerline
 
@@ -77,22 +85,25 @@
       - anki
       - calibre
       - dash
+      - dbeaver-enterprise
       - dropbox
       - evernote
       - firefox
-      - forego
+      - gitter
       - geektool
       - google-chrome
       - google-drive
       - hazel
       - hipchat
-      - intellij-idea-ce
+#      - intellij-idea-ce
       - istat-menus
       - iterm2
-      - kindle
+      - java
+#      - kindle
       - moom
       - mou
       - omnigraffle
+      - opera
       - skype
       - slack
       - totalspaces
@@ -101,9 +112,15 @@
       - twitterrific
       - yourkit-java-profiler
       - vagrant
-#      - virtualbox
+      - virtualbox
       - visualvm
       - vlc
+
+    apps_to_update:
+#      - 1password
+#      - google-chrome
+      - kindle
+#      - slack
 
     projects:
       - name: emacs.d
@@ -120,6 +137,7 @@
 
     python_libs:
       - boto
+      - invoke
       - markdown
       - mkdocs
       - paramiko
@@ -131,16 +149,19 @@
       - vboxapi
       
     ruby_libs:
+      - bundler
       - compass
+      - jekyll
+      - libxml-ruby
       - nokogiri
       - sqlite3
-      - libxml-ruby
       - unf
 
     node_libs:
       - aglio
       - generator-webapp
       - lineman
+      - nightmare
       - yo
 
   tasks:
@@ -165,8 +186,8 @@
       homebrew_tap: tap="{{ item }}" state=present
       with_items: homebrew_taps
 
-    - name: Update Homebrew and all installed libraries
-      homebrew: update_homebrew=yes upgrade_all=yes
+#    - name: Update Homebrew and all installed libraries
+#      homebrew: update_homebrew=yes upgrade_all=yes
 
     - name: Install additional fonts
       homebrew_cask: name=font-{{ item }} state=present
@@ -182,6 +203,10 @@
     - name: Install apps with brew-cask
       homebrew_cask: name="{{ item }}" state=present
       with_items: applications
+
+    - name: Install apps with brew-cask
+      shell: brew cask install --force "{{ item }}"
+      with_items: apps_to_update
 
     - name: Install Python modules via pip
       pip: name="{{ item }}"
