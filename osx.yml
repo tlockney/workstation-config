@@ -8,7 +8,6 @@
     personal_dev_home: "{{ dev_home }}/Personal"
     thirdparty_dev_home: "{{ dev_home }}/ThirdParty"
     homebrew_taps:
-      - phinze/cask
       - caskroom/fonts
 
     homebrew_libs:
@@ -23,6 +22,7 @@
       - cabal-install
       - coreutils
       - corkscrew
+      - direnv
       - docker
       - elixir
       - fish
@@ -54,6 +54,7 @@
       - ssh-copy-id
       - tmux
       - tree
+      - typesafe-activator
       - unrar
       - wget
 
@@ -79,46 +80,39 @@
 
     applications:
       - 1password
-      - adium
       - alfred
       - android-file-transfer
       - anki
       - calibre
-      - dash
-      - dbeaver-enterprise
+      - ctivo     
+      - daisydisk
       - dropbox
+      - emacs
       - evernote
-      - firefox
-      - gitter
-      - geektool
       - google-chrome
       - google-drive
       - hazel
-      - hipchat
-#      - intellij-idea-ce
+      - intellij-idea-ce
       - istat-menus
-      - iterm2
+      - iterm2-beta
       - java
-#      - kindle
+      - kindle
+      - lastpass
       - moom
-      - mou
       - omnigraffle
-      - opera
+      - postman
+      - screenhero
+      - send-to-kindle
       - skype
       - slack
-      - totalspaces
+      - spotify
       - transmission
       - transmit
-      - twitterrific
-      - yourkit-java-profiler
-      - vagrant
-      - virtualbox
-      - visualvm
-      - vlc
 
     apps_to_update:
-#      - 1password
+      - 1password
 #      - google-chrome
+      - intellij-idea-ce
       - kindle
 #      - slack
 
@@ -197,8 +191,8 @@
       homebrew: name="{{ item }}" state=present
       with_items: homebrew_libs
 
-    - name: Install Emacs with Homebrew
-      homebrew: name=emacs state=present install_options=with-gnutls,with-cocoa,srgb,HEAD
+#    - name: Install Emacs with Homebrew
+#      homebrew: name=emacs state=present install_options=with-gnutls,with-cocoa,srgb,HEAD
 
     - name: Install apps with brew-cask
       homebrew_cask: name="{{ item }}" state=present
